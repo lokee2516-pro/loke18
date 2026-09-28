@@ -2243,3 +2243,574 @@ button {
     letter-spacing: 0.11em;
   }
 }
+/* =========================================
+   ❤️ NE KORIKALU
+========================================= */
+
+.wish-screen {
+  z-index: 20;
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(38, 153, 229, 0.18),
+      transparent 40%
+    ),
+    linear-gradient(
+      180deg,
+      #020713 0%,
+      #03152c 100%
+    );
+}
+
+.wish-page {
+  width: min(680px, 92vw);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 30px 0 50px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 21;
+}
+
+.wish-back,
+.songs-back {
+  border: 0;
+  background: transparent;
+  color: rgba(220, 244, 255, 0.75);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.wish-content {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.wish-eyebrow,
+.songs-eyebrow {
+  color: #72cfff;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin: 0 0 15px;
+}
+
+.wish-title,
+.songs-title {
+  margin: 0;
+  color: #f3fbff;
+  font-family: Georgia, serif;
+  font-size: clamp(42px, 8vw, 70px);
+  font-weight: 500;
+  text-shadow:
+    0 0 25px rgba(93, 193, 255, 0.25);
+}
+
+.wish-line,
+.songs-line {
+  width: 70px;
+  height: 1px;
+  margin: 18px auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #68cfff,
+    transparent
+  );
+}
+
+.wish-subtitle,
+.songs-subtitle {
+  color: rgba(220, 242, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 25px;
+}
+
+.wish-input {
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+  box-sizing: border-box;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(93, 193, 255, 0.2);
+  outline: none;
+  background: rgba(3, 22, 45, 0.65);
+  color: #eaf8ff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 20px 50px rgba(0, 80, 160, 0.12);
+}
+
+.wish-input::placeholder {
+  color: rgba(190, 220, 240, 0.4);
+}
+
+.wish-input:focus {
+  border-color: rgba(93, 193, 255, 0.45);
+  box-shadow:
+    0 0 25px rgba(50, 170, 240, 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.wish-submit {
+  margin-top: 18px;
+  border: 1px solid rgba(125, 211, 255, 0.3);
+  border-radius: 999px;
+  padding: 13px 24px;
+  background: linear-gradient(
+    90deg,
+    #0d6fbd,
+    #159fe5
+  );
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  box-shadow:
+    0 10px 35px rgba(0, 110, 190, 0.2);
+}
+
+.wish-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.wish-success-message {
+  width: 100%;
+  animation: wishSuccessAppear 0.8s ease forwards;
+}
+
+.wish-success-main {
+  color: #8fd9ff;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 18px 0 0;
+  text-shadow:
+    0 0 18px rgba(93, 193, 255, 0.3);
+}
+
+.wish-reassurance {
+  margin-top: 24px;
+  padding: 22px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(93, 193, 255, 0.14);
+  background: rgba(4, 24, 48, 0.42);
+  box-shadow:
+    0 12px 35px rgba(0, 80, 160, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.wish-reassurance strong {
+  display: block;
+  color: #dff7ff;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.wish-reassurance p {
+  color: rgba(220, 240, 255, 0.76);
+  font-size: 13px;
+  line-height: 1.75;
+  margin: 18px 0 0;
+}
+
+.wish-reassurance p:last-child {
+  margin-bottom: 0;
+}
+
+.wish-footer {
+  color: rgba(190, 220, 240, 0.38);
+  font-size: 10px;
+  margin: 24px 0 0;
+}
+
+@keyframes wishSuccessAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   🎵 FAVOURITE SONGS
+========================================= */
+
+.songs-screen {
+  z-index: 20;
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(38, 153, 229, 0.18),
+      transparent 40%
+    ),
+    linear-gradient(
+      180deg,
+      #020713 0%,
+      #03152c 100%
+    );
+}
+
+.songs-page {
+  width: min(720px, 92vw);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 30px 0 50px;
+  box-sizing: border-box;
+}
+
+.songs-content {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.song-card {
+  width: min(600px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 22px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  border: 1px solid rgba(93, 193, 255, 0.15);
+  background: rgba(5, 28, 55, 0.62);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 20px 60px rgba(0, 70, 140, 0.13);
+  text-align: left;
+}
+
+.song-card-icon {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(90, 200, 255, 0.8),
+      rgba(14, 91, 155, 0.5)
+    );
+  color: #fff;
+  font-size: 24px;
+  box-shadow:
+    0 0 30px rgba(45, 170, 240, 0.2);
+}
+
+.song-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.song-card-info span {
+  color: #72cfff;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.song-card-info strong {
+  color: #effaff;
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.song-card-info small {
+  color: rgba(220, 240, 255, 0.55);
+  font-size: 12px;
+}
+
+.song-note {
+  width: min(600px, 100%);
+  margin-top: 18px;
+  padding: 18px 20px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-radius: 18px;
+  background: rgba(4, 22, 44, 0.45);
+  border: 1px solid rgba(93, 193, 255, 0.1);
+}
+
+.song-note span {
+  color: #74d0ff;
+  font-size: 18px;
+}
+
+.song-note p {
+  margin: 0;
+  color: rgba(220, 240, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+
+/* =========================================
+   🎁 SURPRISE
+========================================= */
+
+.surprise-screen {
+  z-index: 30;
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      circle at 50% 25%,
+      rgba(30, 125, 220, 0.22),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      #020713 0%,
+      #041329 100%
+    );
+}
+
+.surprise-page {
+  width: min(760px, 92vw);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 36px 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 31;
+}
+
+.surprise-countdown-wrap,
+.surprise-prank-wrap,
+.surprise-message-wrap {
+  width: 100%;
+  text-align: center;
+  animation: surpriseAppear 0.8s ease forwards;
+}
+
+.surprise-eyebrow {
+  margin: 0 0 18px;
+  color: #72cfff;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.surprise-countdown {
+  color: #f5fbff;
+  font-family: Georgia, serif;
+  font-size: clamp(90px, 22vw, 180px);
+  font-weight: 500;
+  line-height: 0.95;
+  text-shadow:
+    0 0 22px rgba(93, 193, 255, 0.55),
+    0 0 70px rgba(30, 125, 220, 0.3);
+  animation: surpriseCountPulse 0.95s ease;
+}
+
+.surprise-prank-title {
+  margin: 0;
+  color: #f5fbff;
+  font-family: Georgia, serif;
+  font-size: clamp(36px, 8vw, 72px);
+  font-weight: 500;
+  line-height: 1.1;
+  text-shadow:
+    0 0 22px rgba(93, 193, 255, 0.45),
+    0 0 60px rgba(30, 125, 220, 0.25);
+}
+
+.surprise-message-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.surprise-message-number {
+  margin: 0 0 18px;
+  color: rgba(114, 207, 255, 0.7);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.surprise-message-card {
+  width: min(680px, 100%);
+  max-height: min(68vh, 650px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: clamp(26px, 5vw, 48px)
+    clamp(20px, 5vw, 46px);
+  border: 1px solid rgba(93, 193, 255, 0.18);
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(11, 39, 76, 0.78),
+      rgba(2, 12, 28, 0.9)
+    );
+  box-shadow:
+    0 24px 80px rgba(0, 80, 160, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.surprise-message-text {
+  margin: 0;
+  color: #eaf8ff;
+  font-size: clamp(15px, 2.2vw, 18px);
+  line-height: 2;
+  white-space: pre-line;
+  text-align: center;
+}
+
+.surprise-next-button {
+  margin-top: 24px;
+  border: 1px solid rgba(125, 211, 255, 0.3);
+  border-radius: 999px;
+  padding: 13px 22px;
+  background:
+    linear-gradient(
+      90deg,
+      #0d6fbd,
+      #159fe5
+    );
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  box-shadow:
+    0 10px 35px rgba(0, 110, 190, 0.2);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.surprise-next-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 40px rgba(0, 130, 220, 0.28);
+}
+
+.surprise-next-button span {
+  margin-left: 8px;
+}
+
+@keyframes surpriseAppear {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes surpriseCountPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+    filter: blur(8px);
+  }
+
+  55% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: blur(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* =========================================
+   📱 MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .wish-page,
+  .songs-page {
+    width: min(94vw, 720px);
+    padding-top: 22px;
+  }
+
+  .wish-content,
+  .songs-content {
+    min-height: calc(100vh - 80px);
+  }
+
+  .wish-title,
+  .songs-title {
+    font-size: clamp(38px, 11vw, 58px);
+  }
+
+  .wish-input {
+    min-height: 135px;
+    font-size: 13px;
+  }
+
+  .song-card {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .song-card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .song-card-info strong {
+    font-size: 17px;
+  }
+
+  .surprise-page {
+    width: min(94vw, 760px);
+    padding: 24px 0;
+  }
+
+  .surprise-message-card {
+    max-height: 66vh;
+    border-radius: 22px;
+  }
+
+  .surprise-message-text {
+    font-size: 14px;
+    line-height: 1.85;
+  }
+}

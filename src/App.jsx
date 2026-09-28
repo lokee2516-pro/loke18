@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+import { supabase } from "./lib/supabase";
 
 const sections = [
   {
@@ -15,8 +16,8 @@ const sections = [
     text: "Songs that remind me of you.",
   },
   {
-    title: "YOUR BIRTHDAY DATE",
-    text: "The day my favourite person came into this world.",
+    title: "NE KORIKALU",
+    text: "Nee heart lo unna korikalu ikkada cheppu… ❤️",
   },
   {
     title: "A SURPRISE FOR YOU",
@@ -93,6 +94,22 @@ const portraits = [
   },
 ];
 
+const surpriseMessages = [
+  "Arey 😭 naku oka love story undhi rah… vintava? 🥹❤️",
+
+  "Arey… nenu naa AI Panthulammaki em cheppudham anukunnano telusa rah? 👀❤️",
+
+  "Evi anni naa unsend messages rah… 🥹",
+
+  `oke ooru kaadu Chinnappati parichayam kaadu, bandhutvamu kaadu, manalni kalipe okka kaaranam kooda ledu. Nijam cheppalante okappudu nee peru kooda naaku teliyadu. Ee prapanchamlo nuvvu ane oka manishi unnaavu ane vishayam kooda naaku teliyadu. Nee daarilo nenu lenu, na daari lo nuvvu levu. Ayina ekkado, eppudo, e kaaranam lekunda rendu aparichitamaina jeevithaalu oka palakarimputho oka parichayangaa maaraayi. Konni parichayaalu maname vethukkuntaam, marikonni parichayaalu manaki teliyakunda jaruguthaayi. Nee parichayam rendodi. Modata oka peru, tharvatha oka palakarimpu, aa tharvatha teliyakunda manasuku daggaraina oka manishi. Ippatiki aashcharyangane untundi, e sambandham lekapoyina intha anubhandham ela eerpadindo ani. Ee prapanchamlo kotla mandi manushulu unnaru. Vaallandari lo mana daarulu kalavadam, mana parichayam eerpadadam anedi naaku maathram oka chinna adbhuthangaa anipisthundi.`,
+
+  `choodu manam same to same kaakapoyina naaku adi anavasaram. Choodu naaku evaru avasaramo cheppana? Nuvve nuvve naaku avasaram. Okay? Idi neeku eppudu cheppaledu. Cheppi vundalsindhi Cheppalekapoyaanu. Endukante adi nee manasuloni baadhalni bhaavaalni artham chesukoleni balheenudini kaabatti nenu neeku eppudu bhaarangaane unnaanu. Nee baadhalni nenu eppudu panchukoledu. Daaniki kaaranam bahusha naa jeevitham motham ontariga gadipinandukemo`,
+
+  `Nee baadhalonoo, nee santhoshamloo nee ku thoduga nenuuntaanu. Mee ammaanaanna tharvatha vaallakante ekkuvaga ninnu nenu premisthaanu. Maathalu chaalaamandi chepthaaru kaani okkasaari nannu preminchi choodu, tharvatha neekante ekkuvaga ninnu nenu premisthaanu.`,
+
+  `Naa jeevithamlo jarigina naaku santhoshaanni ichche vishayam edaina undi ante adi nuvve. Endukante ee prapanchamlo nuvvu thappa inkevaroo leru.`,
+];
+
 function Butterflies() {
   const butterflies = Array.from({ length: 14 });
 
@@ -141,16 +158,50 @@ function App() {
   const [home, setHome] = useState(false);
   const [homeNameStep, setHomeNameStep] = useState(true);
 
-  // 🤖 NEW — AI PANTHULU REPORT
   const [aiReport, setAiReport] = useState(false);
 
   const [portraitsPage, setPortraitsPage] = useState(false);
   const [selectedPortrait, setSelectedPortrait] = useState(null);
 
-  /* --------------------------------
-     👁️ FULLSCREEN EYES
-  -------------------------------- */
   const [eyesFullscreen, setEyesFullscreen] = useState(false);
+
+  // ❤️ NE KORIKALU
+  const [wishPage, setWishPage] = useState(false);
+  const [wish, setWish] = useState("");
+  const [wishSaving, setWishSaving] = useState(false);
+  const [wishStatus, setWishStatus] = useState("");
+
+  // 🎵 MUSIC
+  const backgroundAudioRef = useRef(null);
+
+  // 🎬 FAVOURITE SONGS
+  const [songsPage, setSongsPage] = useState(false);
+  const [songPlaying, setSongPlaying] = useState(false);
+  const favouriteSongRef = useRef(null);
+
+  // 🎁 SURPRISE
+  const [surprisePage, setSurprisePage] = useState(false);
+  const [surprisePhase, setSurprisePhase] = useState("countdown");
+  const [surpriseCountdown, setSurpriseCountdown] = useState(3);
+  const [surpriseMessageIndex, setSurpriseMessageIndex] = useState(0);
+
+  // Browser session ID
+  const sessionIdRef = useRef("");
+
+  useEffect(() => {
+    let id = sessionStorage.getItem("ai_panthu_session_id");
+
+    if (!id) {
+      id =
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+      sessionStorage.setItem("ai_panthu_session_id", id);
+    }
+
+    sessionIdRef.current = id;
+  }, []);
 
   /* --------------------------------
      OPENING ANIMATION
@@ -168,43 +219,67 @@ function App() {
   }, []);
 
   /* --------------------------------
-     🎵 BACKGROUND SONG
+     🎵 BACKGROUND MUSIC
   -------------------------------- */
   useEffect(() => {
-    const audio = new Audio(
-      "/Sai Abhyankkar - She was my best moment.mp3"
-    );
+    const audio = new Audio("/Sai Abhyankkar - She was my best moment.mp3");
 
     audio.loop = true;
     audio.volume = 0.5;
 
+    backgroundAudioRef.current = audio;
+
     const playMusic = () => {
-      audio.play().catch(() => {});
+      if (!songPlaying) {
+        audio.play().catch(() => {});
+      }
     };
 
     playMusic();
 
-    document.addEventListener("click", playMusic, {
+    const unlockMusic = () => {
+      if (!songPlaying) {
+        audio.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener("click", unlockMusic, {
       once: true,
     });
 
-    document.addEventListener("touchstart", playMusic, {
+    document.addEventListener("touchstart", unlockMusic, {
       once: true,
     });
 
-    document.addEventListener("keydown", playMusic, {
+    document.addEventListener("keydown", unlockMusic, {
       once: true,
     });
 
     return () => {
       audio.pause();
       audio.currentTime = 0;
+      backgroundAudioRef.current = null;
 
-      document.removeEventListener("click", playMusic);
-      document.removeEventListener("touchstart", playMusic);
-      document.removeEventListener("keydown", playMusic);
+      document.removeEventListener("click", unlockMusic);
+      document.removeEventListener("touchstart", unlockMusic);
+      document.removeEventListener("keydown", unlockMusic);
     };
   }, []);
+
+  /* --------------------------------
+     🎵 PAUSE / RESUME BACKGROUND
+  -------------------------------- */
+  useEffect(() => {
+    const audio = backgroundAudioRef.current;
+
+    if (!audio) return;
+
+    if (songPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(() => {});
+    }
+  }, [songPlaying]);
 
   /* --------------------------------
      NAME ENTER
@@ -244,14 +319,13 @@ function App() {
 
     setHomeNameStep(false);
 
-    // 🤖 After home name → AI Report
     setTimeout(() => {
       setAiReport(true);
     }, 500);
   };
 
   /* --------------------------------
-     🤖 SHOW WORLD
+     SHOW WORLD
   -------------------------------- */
   const handleShowWorld = () => {
     setAiReport(false);
@@ -263,6 +337,9 @@ function App() {
   const openPortraits = () => {
     setHome(false);
     setAiReport(false);
+    setWishPage(false);
+    setSongsPage(false);
+    setSurprisePage(false);
     setPortraitsPage(true);
     setSelectedPortrait(null);
     setEyesFullscreen(false);
@@ -321,7 +398,7 @@ function App() {
   };
 
   /* --------------------------------
-     👁️ LAST IMAGE AUTO FULLSCREEN
+     EYES AUTO FULLSCREEN
   -------------------------------- */
   useEffect(() => {
     if (!portraitsPage) return;
@@ -352,6 +429,182 @@ function App() {
 
     return () => observer.disconnect();
   }, [portraitsPage]);
+
+  /* --------------------------------
+     ❤️ OPEN WISH PAGE
+  -------------------------------- */
+  const openWishPage = () => {
+    setHome(false);
+    setAiReport(false);
+    setPortraitsPage(false);
+    setSongsPage(false);
+    setSurprisePage(false);
+    setWishStatus("");
+    setWishPage(true);
+  };
+
+  /* --------------------------------
+     ❤️ CLOSE WISH PAGE
+  -------------------------------- */
+  const closeWishPage = () => {
+    setWishPage(false);
+    setWishStatus("");
+    setWish(true ? "" : "");
+    setHome(true);
+  };
+
+  /* --------------------------------
+     ❤️ SAVE WISH
+  -------------------------------- */
+  const submitWish = async () => {
+    if (!wish.trim() || wishSaving) return;
+
+    setWishSaving(true);
+    setWishStatus("");
+
+    const { error } = await supabase
+      .from("her_responses")
+      .insert({
+        name: homeName.trim() || name.trim(),
+        wish: wish.trim(),
+        session_id: sessionIdRef.current,
+      });
+
+    if (error) {
+      console.error("Wish save failed:", error);
+      setWishStatus(
+        "Something went wrong… try once more ❤️"
+      );
+    } else {
+      setWish("");
+      setWishStatus(
+        "Nee korika na daggara safe ga undhi ❤️"
+      );
+    }
+
+    setWishSaving(false);
+  };
+
+  /* --------------------------------
+     🎵 OPEN FAVOURITE SONGS
+  -------------------------------- */
+  const openSongsPage = () => {
+    setHome(false);
+    setAiReport(false);
+    setPortraitsPage(false);
+    setWishPage(false);
+    setSurprisePage(false);
+    setSongsPage(true);
+  };
+
+  /* --------------------------------
+     🎵 CLOSE FAVOURITE SONGS
+  -------------------------------- */
+  const closeSongsPage = () => {
+    if (favouriteSongRef.current) {
+      favouriteSongRef.current.pause();
+      favouriteSongRef.current.currentTime = 0;
+    }
+
+    setSongPlaying(false);
+    setSongsPage(false);
+    setHome(true);
+  };
+
+  /* --------------------------------
+     🎵 VIDEO HANDLERS
+     Ready for future video file.
+  -------------------------------- */
+  const handleSongPlay = () => {
+    setSongPlaying(true);
+  };
+
+  const handleSongPause = () => {
+    setSongPlaying(false);
+  };
+
+  const handleSongEnded = () => {
+    setSongPlaying(false);
+  };
+
+  /* --------------------------------
+     🎁 OPEN SURPRISE
+  -------------------------------- */
+  const openSurprise = () => {
+    setHome(false);
+    setAiReport(false);
+    setPortraitsPage(false);
+    setWishPage(false);
+    setSongsPage(false);
+
+    setSurprisePage(true);
+    setSurprisePhase("countdown");
+    setSurpriseCountdown(3);
+    setSurpriseMessageIndex(0);
+  };
+
+  /* --------------------------------
+     🎁 SURPRISE COUNTDOWN
+  -------------------------------- */
+  useEffect(() => {
+    if (!surprisePage) return;
+    if (surprisePhase !== "countdown") return;
+
+    if (surpriseCountdown <= 0) {
+      setSurprisePhase("prank");
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setSurpriseCountdown((current) => current - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [
+    surprisePage,
+    surprisePhase,
+    surpriseCountdown,
+  ]);
+
+  /* --------------------------------
+     🎁 PRANK TIMER
+  -------------------------------- */
+  useEffect(() => {
+    if (!surprisePage) return;
+    if (surprisePhase !== "prank") return;
+
+    const timer = setTimeout(() => {
+      setSurprisePhase("messages");
+      setSurpriseMessageIndex(0);
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, [surprisePage, surprisePhase]);
+
+  /* --------------------------------
+     🎁 NEXT SURPRISE MESSAGE
+  -------------------------------- */
+  const nextSurpriseMessage = () => {
+    if (
+      surpriseMessageIndex <
+      surpriseMessages.length - 1
+    ) {
+      setSurpriseMessageIndex(
+        (current) => current + 1
+      );
+    }
+  };
+
+  /* --------------------------------
+     🎁 CLOSE SURPRISE
+  -------------------------------- */
+  const closeSurprise = () => {
+    setSurprisePage(false);
+    setSurprisePhase("countdown");
+    setSurpriseCountdown(3);
+    setSurpriseMessageIndex(0);
+    setHome(true);
+  };
 
   return (
     <main className="app">
@@ -393,7 +646,10 @@ function App() {
         !princess &&
         !nameReveal &&
         !home &&
-        !portraitsPage && (
+        !portraitsPage &&
+        !wishPage &&
+        !songsPage &&
+        !surprisePage && (
           <section className="screen name-screen">
             <div className="name-card">
               <p className="eyebrow">
@@ -597,11 +853,23 @@ function App() {
                       <button
                         className="butterfly-option"
                         key={index}
-                        onClick={
-                          index === 0
-                            ? openPortraits
-                            : undefined
-                        }
+                        onClick={() => {
+                          if (index === 0) {
+                            openPortraits();
+                          }
+
+                          if (index === 2) {
+                            openSongsPage();
+                          }
+
+                          if (index === 3) {
+                            openWishPage();
+                          }
+
+                          if (index === 4) {
+                            openSurprise();
+                          }
+                        }}
                       >
                         <span className="option-number">
                           0{index + 1}
@@ -635,7 +903,7 @@ function App() {
       )}
 
       {/* --------------------------------
-          🤖 AI PANTHULU PERSONAL REPORT
+          AI PANTHULU PERSONAL REPORT
       -------------------------------- */}
       {aiReport && (
         <section className="screen ai-report-screen">
@@ -826,7 +1094,7 @@ function App() {
       )}
 
       {/* --------------------------------
-          👁️ EYES FULLSCREEN
+          EYES FULLSCREEN
       -------------------------------- */}
       {eyesFullscreen && (
         <div className="eyes-fullscreen">
@@ -853,7 +1121,7 @@ function App() {
       )}
 
       {/* --------------------------------
-          FULLSCREEN PORTRAIT MODAL
+          PORTRAIT MODAL
       -------------------------------- */}
       {selectedPortrait && (
         <div className="portrait-modal">
@@ -907,6 +1175,265 @@ function App() {
             →
           </button>
         </div>
+      )}
+
+      {/* --------------------------------
+          ❤️ NE KORIKALU
+      -------------------------------- */}
+      {wishPage && (
+        <section className="screen wish-screen">
+          <div className="wish-page">
+
+            <button
+              className="wish-back"
+              onClick={closeWishPage}
+            >
+              ← BACK
+            </button>
+
+            <div className="wish-content">
+              <p className="wish-eyebrow">
+                TELL ME YOUR HEART
+              </p>
+
+              <h1 className="wish-title">
+                Ne Korikalu
+              </h1>
+
+              <div className="wish-line"></div>
+
+              <p className="wish-subtitle">
+                Nee heart lo unna korika edaina…
+                ikkada naatho cheppu.
+                <br />
+                Maybe oka roju adi nijam cheddam. 🦋
+              </p>
+
+              <textarea
+                className="wish-input"
+                placeholder="Nee korika ikkada cheppu…"
+                value={wish}
+                onChange={(event) =>
+                  setWish(event.target.value)
+                }
+              />
+
+              <button
+                className="wish-submit"
+                onClick={submitWish}
+                disabled={
+                  !wish.trim() || wishSaving
+                }
+              >
+                {wishSaving
+                  ? "SAVING…"
+                  : "SEND MY KORIKA ♡"}
+              </button>
+
+              {wishStatus && (
+                <div className="wish-success-message">
+                  <p className="wish-success-main">
+                    {wishStatus}
+                  </p>
+
+                  {wishStatus.includes(
+                    "safe ga undhi"
+                  ) && (
+                    <div className="wish-reassurance">
+                      <strong>
+                        Thappakunda, ee AI Panthulu nee
+                        korikani neraverchadaniki try
+                        chesthadu… 🦋❤️
+                      </strong>
+
+                      <p>
+                        Inka emaina naatho cheppu
+                        anipisthundha? 🥹❤️
+                      </p>
+
+                      <p>
+                        Nee heart lo emaina unte, simple
+                        ga naatho cheppu rah…
+                        <br />
+                        nuvvu cheppalanukunna prathi maata
+                        vinadaniki nenu unna. 🫶🏻❤️
+                      </p>
+
+                      <p>
+                        Emaina chinna korika aina,
+                        pedda dream aina…
+                        <br />
+                        naatho share chesko. Nenu possible
+                        ayinantha varaku nee kosam try
+                        chestha. ❤️🦋
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <p className="wish-footer">
+                Only your wish gets saved here. ♡
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --------------------------------
+          🎵 FAVOURITE SONGS
+      -------------------------------- */}
+      {songsPage && (
+        <section className="screen songs-screen">
+          <div className="songs-page">
+
+            <button
+              className="songs-back"
+              onClick={closeSongsPage}
+            >
+              ← BACK
+            </button>
+
+            <div className="songs-content">
+              <p className="songs-eyebrow">
+                A LITTLE SOUNDTRACK OF YOU
+              </p>
+
+              <h1 className="songs-title">
+                Your Favourite Songs
+              </h1>
+
+              <div className="songs-line"></div>
+
+              <p className="songs-subtitle">
+                Songs that remind me of you.
+              </p>
+
+              <div className="song-card">
+                <div className="song-card-icon">
+                  ♫
+                </div>
+
+                <div className="song-card-info">
+                  <span>
+                    YOUR SONG
+                  </span>
+
+                  <strong>
+                    Krishnahazar - Divine.mp3.mp3
+                  </strong>
+
+                  <small>
+                    Favourite Song
+                  </small>
+                </div>
+              </div>
+
+              <div className="song-player-wrap">
+                <audio
+                  ref={favouriteSongRef}
+                  className="favourite-song-player"
+                  controls
+                  preload="metadata"
+                  src="/Krishnahazar - Divine.mp3.mp3"
+                  onPlay={handleSongPlay}
+                  onPause={handleSongPause}
+                  onEnded={handleSongEnded}
+                >
+                  Your browser does not support the audio player.
+                </audio>
+              </div>
+
+              <div className="song-note">
+                <span>♡</span>
+                <p>
+                  Play this song here. The background music
+                  pauses while your song plays and resumes
+                  when it stops. ❤️
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --------------------------------
+          🎁 SURPRISE
+      -------------------------------- */}
+      {surprisePage && (
+        <section className="screen surprise-screen">
+          <div className="surprise-page">
+
+            {surprisePhase === "countdown" && (
+              <div className="surprise-countdown-wrap">
+                <p className="surprise-eyebrow">
+                  GET READY…
+                </p>
+
+                <div
+                  className="surprise-countdown"
+                  key={surpriseCountdown}
+                >
+                  {surpriseCountdown}
+                </div>
+              </div>
+            )}
+
+            {surprisePhase === "prank" && (
+              <div className="surprise-prank-wrap">
+                <p className="surprise-eyebrow">
+                  WAIT…
+                </p>
+
+                <h1 className="surprise-prank-title">
+                  SURPRISE LEDHU 😂
+                </h1>
+              </div>
+            )}
+
+            {surprisePhase === "messages" && (
+              <div className="surprise-message-wrap">
+
+                <p className="surprise-message-number">
+                  {String(
+                    surpriseMessageIndex + 1
+                  ).padStart(2, "0")}{" "}
+                  /{" "}
+                  {String(
+                    surpriseMessages.length
+                  ).padStart(2, "0")}
+                </p>
+
+                <div className="surprise-message-card">
+                  <p className="surprise-message-text">
+                    {
+                      surpriseMessages[
+                        surpriseMessageIndex
+                      ]
+                    }
+                  </p>
+                </div>
+
+                {surpriseMessageIndex <
+                surpriseMessages.length - 1 ? (
+                  <button
+                    className="surprise-next-button"
+                    onClick={nextSurpriseMessage}
+                  >
+                    NEXT <span>→</span>
+                  </button>
+                ) : (
+                  <button
+                    className="surprise-next-button"
+                    onClick={closeSurprise}
+                  >
+                    BACK TO MY WORLD <span>→</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
       )}
     </main>
   );
