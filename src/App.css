@@ -2578,6 +2578,219 @@ button {
 
 
 /* =========================================
+   🎙️ YOUR VOICE NOTES
+========================================= */
+
+.voice-screen {
+  z-index: 25;
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(48, 164, 238, 0.2),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      #020713 0%,
+      #03152c 100%
+    );
+}
+
+.voice-page {
+  width: min(760px, 92vw);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 30px 0 50px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 26;
+}
+
+.voice-back {
+  border: 0;
+  background: transparent;
+  color: rgba(220, 244, 255, 0.75);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.voice-content {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.voice-eyebrow {
+  color: #72cfff;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin: 0 0 15px;
+}
+
+.voice-title {
+  margin: 0;
+  color: #f3fbff;
+  font-family: Georgia, serif;
+  font-size: clamp(42px, 8vw, 70px);
+  font-weight: 500;
+  text-shadow: 0 0 25px rgba(93, 193, 255, 0.25);
+}
+
+.voice-line {
+  width: 70px;
+  height: 1px;
+  margin: 18px auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #68cfff,
+    transparent
+  );
+}
+
+.voice-subtitle {
+  color: rgba(220, 242, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 26px;
+}
+
+.voice-list {
+  width: min(650px, 100%);
+  display: grid;
+  gap: 16px;
+}
+
+.voice-card {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  border: 1px solid rgba(93, 193, 255, 0.14);
+  background: rgba(5, 28, 55, 0.62);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 20px 60px rgba(0, 70, 140, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  text-align: left;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.voice-card:hover,
+.voice-card-playing {
+  border-color: rgba(105, 207, 255, 0.34);
+  box-shadow:
+    0 20px 60px rgba(0, 110, 190, 0.18),
+    0 0 28px rgba(75, 190, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.voice-card-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.voice-icon {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 21px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(98, 211, 255, 0.9),
+      rgba(12, 87, 150, 0.55)
+    );
+  box-shadow: 0 0 28px rgba(45, 170, 240, 0.18);
+}
+
+.voice-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.voice-info span {
+  color: #72cfff;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.voice-info strong {
+  color: #effaff;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.voice-status {
+  color: rgba(220, 242, 255, 0.42);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+
+.voice-card-playing .voice-status {
+  color: #72cfff;
+}
+
+.voice-player {
+  width: 100%;
+  height: 42px;
+  margin-top: 16px;
+  display: block;
+  border-radius: 999px;
+  accent-color: #5ecbff;
+}
+
+.voice-note-footer {
+  width: min(650px, 100%);
+  margin-top: 18px;
+  padding: 17px 20px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-radius: 18px;
+  background: rgba(4, 22, 44, 0.45);
+  border: 1px solid rgba(93, 193, 255, 0.1);
+}
+
+.voice-note-footer span {
+  color: #74d0ff;
+  font-size: 18px;
+}
+
+.voice-note-footer p {
+  margin: 0;
+  color: rgba(220, 240, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+
+/* =========================================
    🎁 SURPRISE
 ========================================= */
 
@@ -2797,6 +3010,44 @@ button {
 
   .song-card-info strong {
     font-size: 17px;
+  }
+
+
+  .voice-page {
+    width: min(94vw, 720px);
+    padding-top: 22px;
+  }
+
+  .voice-content {
+    min-height: calc(100vh - 80px);
+  }
+
+  .voice-title {
+    font-size: clamp(38px, 11vw, 58px);
+  }
+
+  .voice-card {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .voice-card-top {
+    gap: 12px;
+  }
+
+  .voice-icon {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    font-size: 19px;
+  }
+
+  .voice-info strong {
+    font-size: 16px;
+  }
+
+  .voice-status {
+    display: none;
   }
 
   .surprise-page {

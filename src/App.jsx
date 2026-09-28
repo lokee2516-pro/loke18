@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { supabase } from "./lib/supabase";
 
+const ASSET_BASE = import.meta.env.BASE_URL;
+
 const sections = [
   {
     title: "YOUR PORTRAITS",
@@ -27,67 +29,67 @@ const sections = [
 
 const portraits = [
   {
-    image: "/portraits/portrait01.jpg",
+    image: `${ASSET_BASE}portraits/portrait01.jpg`,
     title: "YOUR SMILE",
     text: "That smile I could look at forever.",
   },
   {
-    image: "/portraits/portrait02.jpg",
+    image: `${ASSET_BASE}portraits/portrait02.jpg`,
     title: "YOUR MOMENTS",
     text: "Little moments that became beautiful memories.",
   },
   {
-    image: "/portraits/portrait03.jpg",
+    image: `${ASSET_BASE}portraits/portrait03.jpg`,
     title: "YOUR ELEGANCE",
     text: "Simple. Beautiful. Completely you.",
   },
   {
-    image: "/portraits/portrait04.jpg",
+    image: `${ASSET_BASE}portraits/portrait04.jpg`,
     title: "YOUR HAPPINESS",
     text: "A moment worth keeping forever.",
   },
   {
-    image: "/portraits/portrait05.jpg",
+    image: `${ASSET_BASE}portraits/portrait05.jpg`,
     title: "YOUR VIBES",
     text: "Your own little kind of magic.",
   },
   {
-    image: "/portraits/portrait06.jpg",
+    image: `${ASSET_BASE}portraits/portrait06.jpg`,
     title: "YOUR CUTENESS",
     text: "No explanation needed.",
   },
   {
-    image: "/portraits/portrait07.jpg",
+    image: `${ASSET_BASE}portraits/portrait07.jpg`,
     title: "YOUR BEAUTY",
     text: "Another side of my favourite person.",
   },
   {
-    image: "/portraits/portrait08.jpg",
+    image: `${ASSET_BASE}portraits/portrait08.jpg`,
     title: "YOUR STYLE",
     text: "The way you make every moment yours.",
   },
   {
-    image: "/portraits/portrait09.jpg",
+    image: `${ASSET_BASE}portraits/portrait09.jpg`,
     title: "YOUR MOMENTS",
     text: "One more memory to keep close.",
   },
   {
-    image: "/portraits/portrait10.jpg",
+    image: `${ASSET_BASE}portraits/portrait10.jpg`,
     title: "YOUR GLOW",
     text: "Soft, calm and beautiful.",
   },
   {
-    image: "/portraits/portrait11.jpg",
+    image: `${ASSET_BASE}portraits/portrait11.jpg`,
     title: "YOUR ELEGANCE",
     text: "A beautiful moment captured.",
   },
   {
-    image: "/portraits/portrait12.jpg",
+    image: `${ASSET_BASE}portraits/portrait12.jpg`,
     title: "YOUR CUTE SIDE",
     text: "The side that makes you special.",
   },
   {
-    image: "/portraits/portrait13.jpg",
+    image: `${ASSET_BASE}portraits/portrait13.jpg`,
     title: "YOUR EYES",
     text: "Those eyes say more than words.",
     special: true,
@@ -108,6 +110,10 @@ const surpriseMessages = [
   `Nee baadhalonoo, nee santhoshamloo nee ku thoduga nenuuntaanu. Mee ammaanaanna tharvatha vaallakante ekkuvaga ninnu nenu premisthaanu. Maathalu chaalaamandi chepthaaru kaani okkasaari nannu preminchi choodu, tharvatha neekante ekkuvaga ninnu nenu premisthaanu.`,
 
   `Naa jeevithamlo jarigina naaku santhoshaanni ichche vishayam edaina undi ante adi nuvve. Endukante ee prapanchamlo nuvvu thappa inkevaroo leru.`,
+
+  `Oka samudhram lo neeku entha water kavalo antha teesuko… nuvvu teesukunna aa water antha nee prema anukunte, migilina neeru antha naa prema. 🌊❤️`,
+
+  `Ee oka maata thanaki eduruga, naa tho unnapudu cheppali anukunna… adhe chepputhano ledho ee janmaki… 🥹❤️ Nenu thanani premistha ani cheppadam ledhu… pelli chesukunta ani chepthunna. ❤️💍`,
 ];
 
 function Butterflies() {
@@ -179,6 +185,11 @@ function App() {
   const [songPlaying, setSongPlaying] = useState(false);
   const favouriteSongRef = useRef(null);
 
+  // 🎙️ VOICE NOTES
+  const [voicePage, setVoicePage] = useState(false);
+  const [voicePlayingIndex, setVoicePlayingIndex] = useState(null);
+  const voiceAudioRefs = useRef([]);
+
   // 🎁 SURPRISE
   const [surprisePage, setSurprisePage] = useState(false);
   const [surprisePhase, setSurprisePhase] = useState("countdown");
@@ -222,7 +233,7 @@ function App() {
      🎵 BACKGROUND MUSIC
   -------------------------------- */
   useEffect(() => {
-    const audio = new Audio("/Sai Abhyankkar - She was my best moment.mp3");
+    const audio = new Audio(`${ASSET_BASE}Sai Abhyankkar - She was my best moment.mp3`);
 
     audio.loop = true;
     audio.volume = 0.5;
@@ -486,6 +497,66 @@ function App() {
   };
 
   /* --------------------------------
+     🎙️ OPEN VOICE NOTES
+  -------------------------------- */
+  const openVoicePage = () => {
+    setHome(false);
+    setAiReport(false);
+    setPortraitsPage(false);
+    setWishPage(false);
+    setSongsPage(false);
+    setSurprisePage(false);
+    setVoicePage(true);
+    setVoicePlayingIndex(null);
+  };
+
+  /* --------------------------------
+     🎙️ VOICE PLAY / PAUSE
+  -------------------------------- */
+  const handleVoicePlay = (index) => {
+    voiceAudioRefs.current.forEach((audio, audioIndex) => {
+      if (audio && audioIndex !== index) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    setVoicePlayingIndex(index);
+    setSongPlaying(true);
+  };
+
+  const handleVoicePause = (index) => {
+    if (voicePlayingIndex === index) {
+      setVoicePlayingIndex(null);
+      setSongPlaying(false);
+    }
+  };
+
+  const handleVoiceEnded = (index) => {
+    if (voicePlayingIndex === index) {
+      setVoicePlayingIndex(null);
+      setSongPlaying(false);
+    }
+  };
+
+  /* --------------------------------
+     🎙️ CLOSE VOICE NOTES
+  -------------------------------- */
+  const closeVoicePage = () => {
+    voiceAudioRefs.current.forEach((audio) => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    setVoicePlayingIndex(null);
+    setSongPlaying(false);
+    setVoicePage(false);
+    setHome(true);
+  };
+
+  /* --------------------------------
      🎵 OPEN FAVOURITE SONGS
   -------------------------------- */
   const openSongsPage = () => {
@@ -649,6 +720,7 @@ function App() {
         !portraitsPage &&
         !wishPage &&
         !songsPage &&
+        !voicePage &&
         !surprisePage && (
           <section className="screen name-screen">
             <div className="name-card">
@@ -858,6 +930,10 @@ function App() {
                             openPortraits();
                           }
 
+                          if (index === 1) {
+                            openVoicePage();
+                          }
+
                           if (index === 2) {
                             openSongsPage();
                           }
@@ -1003,6 +1079,101 @@ function App() {
       )}
 
       {/* --------------------------------
+          🎙️ YOUR VOICE NOTES
+      -------------------------------- */}
+      {voicePage && (
+        <section className="screen voice-screen">
+          <div className="voice-page">
+            <button
+              className="voice-back"
+              onClick={closeVoicePage}
+            >
+              ← BACK
+            </button>
+
+            <div className="voice-content">
+              <p className="voice-eyebrow">
+                A LITTLE PIECE OF YOUR VOICE
+              </p>
+
+              <h1 className="voice-title">
+                Your Voice Notes
+              </h1>
+
+              <div className="voice-line"></div>
+
+              <p className="voice-subtitle">
+                Some voices are meant to be heard again and again. ❤️
+              </p>
+
+              <div className="voice-list">
+                {[
+                  {
+                    title: "VOICE NOTE 01",
+                    text: "A little voice note, kept here just for you.",
+                    src: `${import.meta.env.BASE_URL}voice-note-01.mp3`,
+                  },
+                  {
+                    title: "VOICE NOTE 02",
+                    text: "One more little memory in your voice.",
+                    src: `${import.meta.env.BASE_URL}voice-note-02.mp3`,
+                  },
+                ].map((voice, index) => (
+                  <div
+                    className={`voice-card ${
+                      voicePlayingIndex === index
+                        ? "voice-card-playing"
+                        : ""
+                    }`}
+                    key={voice.src}
+                  >
+                    <div className="voice-card-top">
+                      <div className="voice-icon">
+                        {voicePlayingIndex === index ? "◉" : "♫"}
+                      </div>
+
+                      <div className="voice-info">
+                        <span>{voice.title}</span>
+                        <strong>{voice.text}</strong>
+                      </div>
+
+                      <div className="voice-status">
+                        {voicePlayingIndex === index
+                          ? "PLAYING"
+                          : "VOICE"}
+                      </div>
+                    </div>
+
+                    <audio
+                      ref={(element) => {
+                        voiceAudioRefs.current[index] = element;
+                      }}
+                      className="voice-player"
+                      controls
+                      preload="metadata"
+                      src={voice.src}
+                      onPlay={() => handleVoicePlay(index)}
+                      onPause={() => handleVoicePause(index)}
+                      onEnded={() => handleVoiceEnded(index)}
+                    >
+                      Your browser does not support the audio player.
+                    </audio>
+                  </div>
+                ))}
+              </div>
+
+              <div className="voice-note-footer">
+                <span>♡</span>
+                <p>
+                  Background music pauses while a voice note plays and resumes when it stops.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --------------------------------
           YOUR PORTRAITS
       -------------------------------- */}
       {portraitsPage && (
@@ -1106,7 +1277,7 @@ function App() {
           </button>
 
           <img
-            src="/portraits/portrait13.jpg"
+            src={`${ASSET_BASE}portraits/portrait13.jpg`}
             alt="Your Eyes"
           />
 
@@ -1335,7 +1506,7 @@ function App() {
                   className="favourite-song-player"
                   controls
                   preload="metadata"
-                  src="/Krishnahazar - Divine.mp3.mp3"
+                  src={`${ASSET_BASE}Krishnahazar - Divine.mp3.mp3`}
                   onPlay={handleSongPlay}
                   onPause={handleSongPause}
                   onEnded={handleSongEnded}
